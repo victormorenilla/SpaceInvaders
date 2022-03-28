@@ -1,11 +1,9 @@
 package videoGame.Scenes;
 
 import javafx.animation.AnimationTimer;
-import javafx.animation.KeyValue;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 
-import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -20,15 +18,17 @@ import videoGame.Sprites.Shoot;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+
 
 public class GameScene extends GeneralScene{
-    private static final String BACKGROUND_IMAGE="assets/pantalla juego.jpg";
+    private static final String BACKGROUND_IMAGE="assets/GS1.jpg";
+    private static final String BACKGROUND_IMAGE2="assets/pantalla juego.jpg";
     public static final String BACKGROUND_SONG="assets/music.mp3";
     public static final String SOUND_EFFECT="assets/effects.mp3";
     public static final String Shoot="assets/misil.png";
-    ArrayList shoots= new ArrayList<>();
+    //ArrayList shoots= new ArrayList<>();
     private Image background;
+    private Image background2;
     private MainCharacter spacecraft;
     public Enemy BadSpaceCraft=null;
     private Image misil;
@@ -38,11 +38,12 @@ public class GameScene extends GeneralScene{
     public static int points=0;
     private int lives=3;
     boolean on=false;
-    private int cont=0;
+    //private int cont=0;
     public GameScene() {
         super();
         try{
-            background=new Image(Files.newInputStream(Paths.get(BACKGROUND_IMAGE)));
+            background=new Image(Files.newInputStream(Paths.get(BACKGROUND_IMAGE2)));
+            background2=new Image(Files.newInputStream(Paths.get(BACKGROUND_IMAGE)));
             spacecraft =new MainCharacter();
             misil=new Image(Files.newInputStream(Paths.get(Shoot)));
         }catch (Exception e){
@@ -67,8 +68,10 @@ public class GameScene extends GeneralScene{
             public void handle(long currentNanoTime) {
                 gc.setFill(Color.BLACK);
                 gc.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-
-                gc.drawImage(background,0,00);
+                if(points<100)
+                    gc.drawImage(background,0,00);
+                else
+                    gc.drawImage(background2,0,00);
                 spacecraft.draw(gc);
                 if(BadSpaceCraft!=null) {
                     BadSpaceCraft.draw(gc);
@@ -77,7 +80,6 @@ public class GameScene extends GeneralScene{
                  {
                     on=true;
                     bala=new Shoot();
-                    shoots.add(bala);
                     bala.moveTo(spacecraft.getX()+25, spacecraft.getY()-15 );
                 }
                 if(on) {
